@@ -1,0 +1,63 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////app/data/globex.db
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      INLINE_WORKER: "false"
+    volumes: ["app_data:/app/data"]
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      redis: {condition: service_healthy}
+      qdrant: {condition: service_started}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: ["python", "-m", "app.worker"]
+    env_file: .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////app/data/globex.db
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      INLINE_WORKER: "false"
+    volumes: ["app_data:/app/data"]
+    depends_on:
+      app: {condition: service_healthy}
+    restart: unless-stopped
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis_data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+  qdrant:
+    image: qdrant/qdrant:v1.14.1
+    volumes: ["qdrant_data:/qdrant/storage"]
+    restart: unless-stopped
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports: ["127.0.0.1:8080:80"]
+    depends_on:
+      app: {condition: service_healthy}
+    restart: unless-stopped
+volumes:
+  app_data:
+  redis_data:
+  qdrant_data:
