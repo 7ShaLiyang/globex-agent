@@ -148,3 +148,8 @@ npm run build
 外部付费模型不参与默认测试；LLM 集成测试使用本地 OpenAI 兼容 SSE 测试服务，但确实执行 AgentScope 的模型/工具/多轮循环。
 
 详见 [架构与边界](docs/架构与边界.md)、[配置与接口](docs/配置与接口.md)、[验证记录](docs/验证记录.md)、[设计演进记录](docs/设计演进记录.md)。
+
+
+
+<img width="2938" height="1434" alt="8657c916d4aea3d2717acd055fdd1bf6" src="https://github.com/user-attachments/assets/92046481-69e7-4d78-9c7e-a1d50bbd3652" />
+
