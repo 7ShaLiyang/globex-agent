@@ -151,5 +151,5 @@ npm run build
 
 
 
-<img width="2938" height="1434" alt="8657c916d4aea3d2717acd055fdd1bf6" src="https://github.com/user-attachments/assets/92046481-69e7-4d78-9c7e-a1d50bbd3652" />
+<img width="2796" height="1352" alt="b011f66142b2c9f102a7b69d455aff0b" src="https://github.com/user-attachments/assets/be3c78a5-0e93-422b-9f48-8f4f05ca5a95" />
 
